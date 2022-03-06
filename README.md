@@ -1,3 +1,4 @@
+
 # AWS Hub and Spoke Architecture with Shared Services and Transit Gateway Connect VPCs - Terraform Sample
 
 This repository contains terraform code to deploy a sample AWS Hub and Spoke architecture with Shared Services and Transit Gateway Connect VPC, with the following centralized services:
@@ -8,12 +9,12 @@ This repository contains terraform code to deploy a sample AWS Hub and Spoke arc
     - Connect to the Transit Gateway Connect Peer using a GRE Tunnel
     - Peer with the Transit Gateway Connect Peer BGP address using BGP
 - Deploy a Cisco CSR1000v into a Remote Spoke VPC
-  - Configure IPsec from the Remote Spoke VPC CSR1000v to the Connect VPC CSR1000v instance
+  - Configure IPsec from the Remote Spoke VPC CSR1000v instance to the Connect VPC CSR1000v instance 
   - Configure BGP neighbours between the Remote Spoke CSR1000v and the CSR1000v in the Connect VPC over the IPSec tunnel
 
+
+
 The resources deployed and the architectural pattern they follow is purely for demonstration/testing purposes.
-
-
 
 ## Prerequisites
 
@@ -22,13 +23,9 @@ The resources deployed and the architectural pattern they follow is purely for d
 - Have an AWS Marketplace subscription for Cisco Cloud Services Router (CSR) 1000v - Transit Network VPC - BYOL software
 - Terraform installed
 
-
-
 ## Code Principles:
 
 - Writing DRY (Do No Repeat Yourself) code using a modular design pattern
-
-
 
 ## Usage
 
@@ -37,8 +34,6 @@ The resources deployed and the architectural pattern they follow is purely for d
 - To change the configuration about the Security Groups and VPC endpoints to create, edit the *locals.tf* file in the project root directory
 - Initialize Terraform using `terraform init`
 - Deploy the template using `terraform apply`
-
-
 
 ## Terraform Output:
 
