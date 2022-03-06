@@ -96,11 +96,5 @@ locals {
       phz_name       = "ec2messages.${var.aws_region}.amazonaws.com"
       phz_alias_name = ""
     }
-    # s3 = {
-    #   name        = "com.amazonaws.${var.aws_region}.s3"
-    #   type        = "Interface"
-    #   private_dns = false
-    #   phz_needed  = false
-    # }
   }
 }

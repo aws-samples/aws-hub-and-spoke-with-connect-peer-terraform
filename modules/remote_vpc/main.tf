@@ -104,4 +104,3 @@ resource "aws_route" "public_internet_gateway" {
     create = "5m"
   }
 }
-

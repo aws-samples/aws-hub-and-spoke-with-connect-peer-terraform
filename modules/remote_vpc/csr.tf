@@ -73,5 +73,3 @@ resource "aws_instance" "csr" {
     ]
   }
 }
-
-

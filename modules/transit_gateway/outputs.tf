@@ -22,4 +22,3 @@ output "amazon_side_asn" {
   value       = aws_ec2_transit_gateway.tgw.amazon_side_asn
   description = "Transit Gateway Amazon Side ASN"
 }
-

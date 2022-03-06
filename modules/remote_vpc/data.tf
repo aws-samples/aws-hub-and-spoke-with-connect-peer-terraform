@@ -13,10 +13,3 @@ data "aws_ami" "csr" {
 
   owners = ["679593333241"] # Cisco Systems
 }
-
-# data "aws_eip" "peer_csr_eip" {
-#   filter {
-#     name   = "tag:Type"
-#     values = ["ConnectCSR"]
-#   }
-# }

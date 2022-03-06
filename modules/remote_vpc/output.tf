@@ -32,7 +32,3 @@ output "interfact_gig_2" {
   description = "gig1 ip address"
   value       = aws_network_interface.g2
 }
-
-# output "public_ip_address" {
-#   value = aws_eip.public_ip.public_ip
-# }

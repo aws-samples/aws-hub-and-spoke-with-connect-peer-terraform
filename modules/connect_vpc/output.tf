@@ -43,7 +43,3 @@ output "peer_address" {
   value       = aws_ec2_transit_gateway_connect_peer.tgw_connect_peer.peer_address
   description = "value of peer_address"
 }
-
-# output "public_ip_address" {
-#   value = aws_eip.public_ip.public_ip
-# }
