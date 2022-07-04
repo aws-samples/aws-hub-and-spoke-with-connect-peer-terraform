@@ -8,7 +8,7 @@ data "aws_ami" "csr" {
 
   filter {
     name   = "name"
-    values = ["cisco-CSR-.16.12.01a-BYOL*"]
+    values = ["cisco_CSR-16.09.08-BYOL*"]
   }
 
   owners = ["679593333241"] # Cisco Systems
