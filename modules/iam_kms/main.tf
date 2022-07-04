@@ -3,6 +3,11 @@
 
 # --- modules/iam_kms/main.tf ---
 
+# Randimize the IAM Role names
+resource "random_id" "my_id" {
+  byte_length = 8
+}
+
 # DATA SOURCE: AWS CALLER IDENTITY - Used to get the Account ID
 data "aws_caller_identity" "current" {}
 
@@ -21,7 +26,7 @@ data "aws_iam_policy_document" "policy_role_document" {
 }
 
 resource "aws_iam_role" "vpc_flowlogs_role" {
-  name               = "vpc-flowlog-role-${var.identifier}"
+  name               = "vpc-flowlog-role-${var.identifier}-${upper(random_id.my_id.id)}"
   assume_role_policy = data.aws_iam_policy_document.policy_role_document.json
 }
 
@@ -41,7 +46,7 @@ data "aws_iam_policy_document" "policy_rolepolicy_document" {
 }
 
 resource "aws_iam_role_policy" "vpc_flowlogs_role_policy" {
-  name   = "vpc-flowlog-role-policy-${var.identifier}"
+  name   = "vpc-flowlog-role-policy-${var.identifier}-${upper(random_id.my_id.id)}"
   role   = aws_iam_role.vpc_flowlogs_role.id
   policy = data.aws_iam_policy_document.policy_rolepolicy_document.json
 }
@@ -49,7 +54,7 @@ resource "aws_iam_role_policy" "vpc_flowlogs_role_policy" {
 # EC2 IAM ROLE - SSM and S3 access
 # IAM instance profile
 resource "aws_iam_instance_profile" "ec2_instance_profile" {
-  name = "ec2_instance_profile_${var.identifier}"
+  name = "ec2_instance_profile_${var.identifier}-${upper(random_id.my_id.id)}"
   role = aws_iam_role.role_ec2.id
 }
 # IAM role
@@ -66,26 +71,26 @@ data "aws_iam_policy_document" "policy_document" {
   }
 }
 resource "aws_iam_role" "role_ec2" {
-  name               = "ec2_ssm_role_${var.identifier}"
+  name               = "ec2_ssm_role_${var.identifier}-${upper(random_id.my_id.id)}"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.policy_document.json
 }
 
 # Policies Attachment to Role
 resource "aws_iam_policy_attachment" "ssm_iam_role_policy_attachment" {
-  name       = "ssm_iam_role_policy_attachment_${var.identifier}"
+  name       = "ssm_iam_role_policy_attachment_${var.identifier}-${upper(random_id.my_id.id)}"
   roles      = [aws_iam_role.role_ec2.id]
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 resource "aws_iam_policy_attachment" "ssm_iam_service_role_attachment" {
-  name       = "ssm_iam_service_role_attachment_${var.identifier}"
+  name       = "ssm_iam_service_role_attachment_${var.identifier}-${upper(random_id.my_id.id)}"
   roles      = [aws_iam_role.role_ec2.id]
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }
 
 resource "aws_iam_policy_attachment" "s3_readonly_policy_attachment" {
-  name       = "s3_readonly_policy_attachment_${var.identifier}"
+  name       = "s3_readonly_policy_attachment_${var.identifier}-${upper(random_id.my_id.id)}"
   roles      = [aws_iam_role.role_ec2.id]
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
 }
