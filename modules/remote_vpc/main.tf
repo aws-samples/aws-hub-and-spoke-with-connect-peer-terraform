@@ -8,6 +8,11 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
+# Count of AZs available in the AWS Region
+locals {
+  az_count = length(data.aws_availability_zones.available)
+}
+
 # VPC
 resource "aws_vpc" "vpc" {
   cidr_block           = var.vpc_info.cidr_block
@@ -39,7 +44,7 @@ resource "aws_subnet" "vpc_public_subnets" {
   count                   = length(data.aws_availability_zones.available.names)
   map_public_ip_on_launch = false
   vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = [for i in range(11, 14) : cidrsubnet(var.vpc_info.cidr_block, 8, i)][count.index]
+  cidr_block              = [for i in range(11, (11+local.az_count)) : cidrsubnet(var.vpc_info.cidr_block, 8, i)][count.index]
   availability_zone       = data.aws_availability_zones.available.names[count.index]
 
   tags = {
@@ -51,7 +56,7 @@ resource "aws_subnet" "vpc_public_subnets" {
 resource "aws_subnet" "vpc_private_subnets" {
   count             = length(data.aws_availability_zones.available.names)
   vpc_id            = aws_vpc.vpc.id
-  cidr_block        = [for i in range(101, 104) : cidrsubnet(var.vpc_info.cidr_block, 8, i)][count.index]
+  cidr_block        = [for i in range(101, (101+local.az_count)) : cidrsubnet(var.vpc_info.cidr_block, 8, i)][count.index]
   availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
