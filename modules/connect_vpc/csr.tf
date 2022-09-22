@@ -3,10 +3,8 @@
 
 # --- modules/connect_vpc/csr.tf ---
 
-data "template_file" "csr_userdata" {
-  count    = var.vpc_info.instance_count
-  template = file("${path.root}/templates/connect_csr_boot_strap_${count.index + 1}.tpl")
-  vars = {
+locals {
+  csr_userdata = templatefile("${path.root}/templates/connect_csr_boot_strap_1.tpl", {
     hostname               = local.hostname
     cgw_tunnel_interface   = local.cgw_tunnel_interface
     cgw_tunnel_ip_address  = local.cgw_tunnel_ip_address
@@ -30,7 +28,7 @@ data "template_file" "csr_userdata" {
     tunnel_cidr_block      = local.tunnel_cidr_block
     tunnnel_cidr_mask      = local.tunnnel_cidr_mask
     vpc_router             = local.vpc_router
-  }
+  })
 }
 
 resource "aws_network_interface" "g1" {
@@ -64,7 +62,7 @@ resource "aws_instance" "csr" {
   ami           = data.aws_ami.csr.id
   instance_type = var.vpc_info.csr_instance_size
   key_name      = var.key_name
-  user_data     = data.template_file.csr_userdata[count.index].rendered
+  user_data     = local.csr_userdata
 
   network_interface {
     network_interface_id = aws_network_interface.g1.id

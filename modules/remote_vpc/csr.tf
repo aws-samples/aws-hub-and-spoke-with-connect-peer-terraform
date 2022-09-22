@@ -3,10 +3,8 @@
 
 # --- modules/rempote_vpc/csr.tf ---
 
-data "template_file" "csr_userdata" {
-  count    = var.vpc_info.instance_count
-  template = file("${path.root}/templates/remote_csr_boot_strap_${count.index + 1}.tpl")
-  vars = {
+locals {
+  csr_userdata = templatefile("${path.root}/templates/remote_csr_boot_strap_1.tpl", {
     hostname              = local.hostname
     isakmp_secret         = local.isakmp_secret
     remote_peer_tunnel_ip = local.remote_peer_tunnel_ip
@@ -18,7 +16,7 @@ data "template_file" "csr_userdata" {
     tunnel_source_ip      = local.tunnel_source_ip
     tunnel_source_mask    = local.tunnel_source_mask
     tunnel_destination_ip = local.tunnel_destination_ip
-  }
+  })
 }
 
 resource "aws_network_interface" "g1" {
@@ -53,7 +51,7 @@ resource "aws_instance" "csr" {
   ami           = data.aws_ami.csr.id
   instance_type = var.vpc_info.csr_instance_size
   key_name      = var.key_name
-  user_data     = data.template_file.csr_userdata[count.index].rendered
+  user_data     = local.csr_userdata
 
   network_interface {
     network_interface_id = aws_network_interface.g1.id
